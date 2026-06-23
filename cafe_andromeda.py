@@ -1,4 +1,4 @@
-#  Programa Cafe Andromeda v1.0
+# Programa Cafe Andromeda v1.1
 
 # Descripcion: Este programa simula el proceso de compra de una cafeteria, le muestra al usuario el menu de bebidas y alimentos
 # de los cuales el puede elegir uno de cada uno o ninguno, luego le pregunta cuantas unidades del producto llevara, asi como su
@@ -6,130 +6,164 @@
 # cuantos llevo, a que precio, subtotal, iva y total a pagar.
 
 # Declaracion de variables
-cuenta, cantidad_producto, precio_unitario = [], [], []
-bebidas = ['Expresso', 'Americano', 'Capuccino', 'Latte', 'Refresco']
-alimentos = ['Sandwich', 'Galleta', 'Rebanada de pastel', 'Dona']
-producto_elegido, subtotal, iva, total, = 0, 0, 0,0
-decision, nombre = 'si', "" 
-i = 1
+menu = [['Expresso', 'Americano', 'Capuccino', 'Latte', 'Refresco'],    # Menu de Bebidas
+        ['Sandwich', 'Galleta', 'Dona', 'Pan', 'Rebanada de Pastel']]   # Meenu de Alimentos
+precios = [[42.00, 51.00, 64.00, 71.00, 33.00],
+           [68.00, 24.00, 16.00, 12.00, 48.00]]
+clientes, cliente, subtotal, unidades, precio_unitario = [], [], [], [], []
+opcion, decision, unidad, nombre = 0, "si", 0, ""
 
 # Funciones
 
 
 # Ejecucion del programa
+
+#while decision == 'si':
 print(f"\n=== Bienvenido a Cafe Andromeda ===")
 
-# Se muestra el menu de bebidas
+while decision == 'si':
+    print(f"\n======= Menu de Bebidas =======")
+    for i in range (len(menu[0])):
+        print(f"{i+1}- {menu[0][i]:<24}$ {precios[0][i]:2.2f}")
 
-print(f"\n=== Bebidas disponibles:\n")
-for bebida in bebidas:
-    print(f" {i} - {bebida}")
-    i += 1
+    while True:
+        opcion = input(f"\nSeleccione su Bebida escribiendo el numero junto a ella o ENTER para no seleccionar ninguna: ")
 
-# Validacion de bebida elegida por el usuario
+        if opcion == "":
+            print(f"\nDecidio no llevar bebida.")
+            break
 
-producto_elegido = int(input(f"\n Ingrese el numero del producto que desea comprar: \n (Ingrese 0 para no llevar ninguna Bebida). "))
-while producto_elegido < 0 or producto_elegido > 5: 
-    print(f"\n Opcion no valida, por favor ingrese un numero del 0 al 5.\n")
-    producto_elegido = int(input(f" Ingrese el numero del producto que desea comprar: \n (Ingrese 0 para no llevar ninguna Bebida). "))
-if producto_elegido != 0:
-    cuenta.append(bebidas[producto_elegido - 1])
+        if opcion.isdigit():
+            opcion = int(opcion)
 
-# Si el usuario no eligio ninguna bebida, el programa se saltara los pasos de preguntar cuantas unidades llevara y el precio unitario.
-# Si el usuario eligio una bebida, se guardara el nombre de la bebida en la lista 'cuenta' para mostrar en el ticket de compra.
+            if 1 <= opcion <= 5:
+                print(f"\nLa bebida que selecciono es: {menu[0][opcion - 1]}")
 
-# Validacion de cantidad de bebidas que llevara el usuario, nos aseguramos que ingrese un numero entero mayor o igual a 1.
+                while True:
+                    unidad = input(f"\nCuantas unidades de {menu[0][opcion - 1]} llevara: ")
 
-if producto_elegido != 0:
-    cantidad_producto.append(int(input(f"\n Ingrese la cantidad del producto que llevara: ")))
-    while cantidad_producto[-1] <= 0:
-        print(f"\n Cantidad no valida, por favor ingrese un numero entero mayor a 0.")
-        cantidad_producto[-1] = int(input(f"\n Ingrese la cantidad del producto que llevara: "))
-    
+                    if unidad.isdigit():
+                        unidad = int(unidad)
 
-# Validacion del precio unitario de la bebida, nos aseguramos de que el precio sea mayor a 0.     
+                        if unidad >= 1:
+                            print(f"\nDecidio llevar {unidad} unidades de {menu[0][opcion - 1]}.")
+                            cliente.append(menu[0][opcion - 1])
+                            subtotal.append(unidad * precios[0][opcion - 1])
+                            unidades.append(unidad)
+                            precio_unitario.append(precios[0][opcion - 1])
+                            break
 
-if producto_elegido != 0:
-    precio_unitario.append(float(input(f"\n Ingrese el precio del producto: ")))
-    while precio_unitario[-1] <= 0:
-        print(f"\n Precio no valido, por favor ingrese un numero mayor a 0.")
-        precio_unitario[-1] = float(input(f"\n Ingrese el precio del producto: "))
+                        else:
+                            print(f"Dato no valido.")
 
-if producto_elegido !=0:
-    subtotal = cantidad_producto[-1] * precio_unitario[-1]
-print(f"\n Subtotal: $ {subtotal:.2f}")
+                    else:
+                        print("Dato no valido.")
+                break
 
-# Aqui se valida que el usuario ingrese 'si' o 'no' y nos aseguramos que no se salte la seccion de
-# alimentos por un error de dedo o por ingresar un numero.
+            else:
+                print(f"\nDato no valido, por favor ingresa el numero junto a la bebida o presiona ENTER para no seleccionar ninguna: ")
 
-decision = input(f"\n Desea agregar algun alimento? (si/no): ").lower()
-while decision != 'si' and decision != 'no':
-    print(f"\n Opcion no valida, por favor ingrese 'si' o 'no'.")
-    decision = input(f"\n Desea agregar algun alimento? (si/no): ").lower()
+        else:
+            print(f"\nDato no valido, por favor ingresa el numero junto a la bebida o presiona ENTER para no seleccionar ninguna: ")
 
-if decision == 'si':
-    i = 1
+    while True:
+        decision = input(f"\nDeseas agregar otra bebida?\nEscribe 'si' o 'no' para continuar: ").strip().lower()
 
-# Se muestra el menu de alimentos
+        if decision == 'no':
+                print(f"\nDecidio no llevar mas bebidas.")
+                break
 
-    print(f"\n=== Alimentos disponibles: \n")
-    for alimento in alimentos:
-        print(f" {i} - {alimento}")
-        i += 1
+        elif decision == 'si':
+                break
 
-# Validacion de alimento elegido por el usuario   
+        else:
+            print(f"\nDato no valido. ")
 
-    producto_elegido = int(input(f"\n Ingrese el numero del producto que desea comprar: \n (Ingrese 0 para no llevar ningun Alimento). "))
-    while producto_elegido < 0 or producto_elegido > 4:
-        print(f"\n Opcion no valida, por favor ingrese un numero del 0 al 4.\n")
-        producto_elegido = int(input(f" Ingrese el numero del producto que desea comprar: \n (Ingrese 0 para no llevar ningun Alimento). "))
-    if producto_elegido != 0:
-        cuenta.append(alimentos[producto_elegido - 1])
+decision = 'si'
 
-# Si el usuario no eligio ningun alimento, el programa se saltara los pasos de preguntar cuantas unidades llevara y el precio unitario.
-# Si el usuario eligio un alimento, se guardara el nombre del alimento en la lista 'cuenta' para mostrar en el ticket de compra.
+while decision == 'si':
+    print(f"\n======= Menu de Alimntos =======")
+    for i in range (len(menu[1])):
+        print(f"{i+1}- {menu[1][i]:<24}$ {precios[1][i]:2.2f}")
 
-# Validacion de cantidad de alimentos que llevara el usuario, nos aseguramos que ingrese un numero entero mayor o igual a 1.
+    while True:
+        opcion = input(f"\nSeleccione su Alimento escribiendo el numero junto a el o ENTER para no seleccionar ninguno: ")
 
-    if producto_elegido != 0:
-        cantidad_producto.append(int(input(f"\n Ingrese la cantidad del producto que llevara: ")))
-        while cantidad_producto[-1] <= 0:
-            print(f"\n Cantidad no valida, por favor ingrese un numero mayor a 0.")
-            cantidad_producto[-1] = int(input(f"\n Ingrese la cantidad del producto que llevara: "))
+        if opcion == "":
+            print(f"\nDecidio no llevar Alimento.")
+            break
 
-# Validacion del precio unitario del alimento, debe ser un numero mayor a 0.
-    
-    if producto_elegido != 0:
-        precio_unitario.append(float(input(f"\n Ingrese el precio del producto: ")))
-        while precio_unitario[-1] <= 0:
-            print(f"\n Precio no valido, por favor ingrese un numero mayor a 0.")
-            precio_unitario[-1] = float(input(f"\n Ingrese el precio del producto: "))
+        if opcion.isdigit():
+            opcion = int(opcion)
 
-    if producto_elegido != 0:
-        subtotal = cantidad_producto[-1] * precio_unitario[-1]
-        print(f"\n Subtotal: $ {subtotal:.2f}")
+            if 1 <= opcion <= 5:
+                print(f"\nEl Alimento que selecciono es: {menu[1][opcion - 1]}")
+
+                while True:
+                    unidad = input(f"\nCuantas unidades de {menu[1][opcion - 1]} llevara: ")
+
+                    if unidad.isdigit():
+                        unidad = int(unidad)
+
+                        if unidad >= 1:
+                            print(f"\nDecidio llevar {unidad} unidades de {menu[1][opcion - 1]}.")
+                            cliente.append(menu[1][opcion - 1])
+                            subtotal.append(unidad * precios[1][opcion - 1])
+                            unidades.append(unidad)
+                            precio_unitario.append(precios[1][opcion - 1])
+                            break
+
+                        else:
+                            print(f"Dato no valido.")
+
+                    else:
+                        print("Dato no valido.")
+                break
+
+            else:
+                print(f"\nDato no valido, por favor ingresa el numero junto al alimento o presiona ENTER para no seleccionar ninguno: ")
+
+        else:
+            print(f"\nDato no valido, por favor ingresa el numero junto al alimento o presiona ENTER para no seleccionar ninguno: ")
+
+    while True:
+        decision = input(f"\nDeseas agregar otro alimento?\nEscribe 'si' o 'no' para continuar: ").strip().lower()
+
+        if decision == 'no':
+            print(f"\nDecidio no llevar mas alimentos.")
+            break
+        
+        elif decision == 'si':
+                break
+
+        else:
+                print(f"\nDato no valido. ")
+
+nombre = input(f"\nIngrese su nombre para generar el Ticket:\n")
+print(f"\n\n\n=================================== Su Ticket =========================================")
+print(f"Nombre: {nombre}\n=======================================================================================")
+print(f"Cantidad\tProducto\t\t\tPrecio Unitario\t\tImporte\n=======================================================================================")
+for producto in range(len(cliente)):
+    print(f"   {unidades[producto]:<12} {cliente[producto]:<35} $ {precio_unitario[producto]:<18.2f}$ {subtotal[producto]:2.2f}")
+
+clientes.append([nombre, unidades, cliente, precio_unitario, subtotal])
+nombre, unidades, cliente, precio_unitario, subtotal = "", [], [], [], []
+
+while True:
+    decision = input(f"\nDeseas registrar un nuevo pedido?\nEscribe 'si o 'no': ").strip().lower()
+
+    if decision == 'no':
+        print(f"\nSu decision fue no registrar mas pedidos.\nSe mostrara el total de venta del dia de hoy:")
+        break
+
+    elif decision == 'si':
+        print(f"\nRegistrando un nuevo pedido . . .\n\n\n")
+        break
+
     else:
-        subtotal = 0
-        print(f"\n Subtotal: $ {subtotal:.2f}")
+        print(f"\nDato no valido.")
 
-# Por ultimo se le pide al usuario que ingrese su nombre para recoger el pedido, se valida que el espacio de nombre no este vacio.
 
-nombre = input(f"\n Ingresa tu nombre para generar ticket de compra: ")
-while nombre == "":
-    print(f"\n El nombre debe tener al menos un caracter, por favor ingrese un nombre valido.")
-    nombre = input(f"\n Ingresa tu nombre para generar ticket de compra: ")
-
-# Se genera el ticket de compra, tambien reiniciamos la variable 'subtotal' a 0, ya que la usaremos para calcular el subtotal del ticket
-
-subtotal = 0
-i = 1
-print(f"\n\n\n=============== Ticket de compra ================= \n")
-print(f" Cliente: {nombre}")
-print(f"===================================================\nProductos: {len(cuenta)}\n===================================================")
-
-for i in range(len(cuenta)):
-    print(f"-  {cantidad_producto[i]}  {cuenta[i]}\t\t\t\t   $ {precio_unitario[i]:.2f}")
-    subtotal += cantidad_producto[i] * precio_unitario[i]
-print(f"\n\t\t\t\tSubtotal:  $ {subtotal:.2f}")
-print(f"\t\t\t\tI.V.A.:    $ {subtotal * 0.16:.2f}")
-print(f"\t\t\t\tTotal:     $ {subtotal * 1.16:.2f}\n\n=============== Gracias por su Compra ==============\n=================== Vuelva Pronto ==================\n")
+print(f"\n========== Ventas del Dia - Cafe Andromeda ==========")
+print(f"\nClientes de hoy: {len(clientes)}.")
+print(clientes)
