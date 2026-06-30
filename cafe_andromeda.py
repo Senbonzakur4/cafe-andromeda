@@ -1,12 +1,7 @@
-# Programa Cafe Andromeda v1.1
+# Cafe Andromeda
 
-## Descripcion: Este programa simula el proceso de compra de una cafeteria, le muestra al usuario el menu de bebidas y alimentos
-## de los cuales el puede elegir cuantas bebidas y alimentos llevar (o no llevar), asi como cuantas unidades de cada uno.
-## Al terminar la seleccion de Bebidas y Alimentos, se le pide el nombre para mostrarle el ticket de compra.
-## Despues el programa pregunta si un usuario nuevo ingresara otro pedido para repetir el ciclo.
-## Si ya no habran mas pedidos, se muestra un resumen de la venta del dia asi como los ingresos totales.
+### Declaracion de Variables
 
-### Declaracion de variables
 menu = [['Expresso', 'Americano', 'Capuccino', 'Latte', 'Refresco'],    # Menu de Bebidas
         ['Sandwich', 'Galleta', 'Dona', 'Pan', 'Rebanada de Pastel']]   # Meenu de Alimentos
 precios = [[42.00, 51.00, 64.00, 71.00, 33.00],
@@ -16,134 +11,125 @@ opcion, unidad, sub_ticket = 0, 0, 0                                         # C
 decision, nombre = "si", " "
 total = 0
 
-### Funciones
+### Definicion de Funciones
 
+def menu_de_bebidas(menu, precios): # Muestra el menu de bebidas y sus precios.
+    print(f"\n========== Menu de Bebidas ==========")
+    for i in range (len(menu[0])):
+        print(f"{i + 1}- {menu[0][i]:<24} $ {precios[0][i]:2.2f}")
 
-### Ejecucion del programa
+def menu_de_alimentos(menu, precios): # Muestra el menu de alimentos y sus precios.
+    print(f"\n========= Menu de Alimentos =========")
+    for i in range (len(menu[1])):
+        print(f"{i + 1}- {menu[1][i]:<24} $ {precios[1][i]:2.2f}")
+      
+def eleccion_de_bebida(): # Permite al usuario seleccionar una bebida del menu.
+    while True:
+        opcion = input(f"\nSeleccione su Bebida escribiendo el numero junto a ella o ENTER para no seleccionar ninguna: ")
 
-while decision == 'si':                                # Mientras la decision sea 'si' el programa seguira funcionando para agregar mas ventas.
-    print(f"\n=== Bienvenido a Cafe Andromeda ===")
+        if opcion == "":
+            print(f"\nDecidio no llevar bebida.")
+            break
 
-    while decision == 'si':
-        print(f"\n======= Menu de Bebidas =======")
-        for i in range (len(menu[0])):
-            print(f"{i+1}- {menu[0][i]:<24}$ {precios[0][i]:2.2f}")
+        if opcion.isdigit():
+            opcion = int(opcion)
 
-        while True:       # Validacion para evitar datos equivocados como ingresar letras o numeros que no estan en el menu.
-            opcion = input(f"\nSeleccione su Bebida escribiendo el numero junto a ella o ENTER para no seleccionar ninguna: ")
+            if 1 <= opcion <= 5:
+                print(f"\nLa bebida que selecciono es: {menu[0][opcion - 1]}")
+                return opcion
+            else:
+                    print(f"\nDato no Valido.")
+        else:
+                print(f"\nDato no Valido.")
 
-            if opcion == "":
-                print(f"\nDecidio no llevar bebida.")
-                break
+def eleccion_de_alimento(): # Permite al usuario seleccionar un alimento del menu.
+    while True:
+        opcion = input(f"\nSeleccione su Alimento escribiendo el numero junto a el o ENTER para no seleccionar ninguno: ")
 
-            if opcion.isdigit():
-                opcion = int(opcion)
+        if opcion == "":
+            print(f"\nDecidio no llevar alimento.")
+            break
 
-                if 1 <= opcion <= 5:
-                    print(f"\nLa bebida que selecciono es: {menu[0][opcion - 1]}")
+        if opcion.isdigit():
+            opcion = int(opcion)
 
-                    while True:        # Validacion para comprobar que las unidades requeridas por el cliente no sean cero o numero negativo.
-                        unidad = input(f"\nCuantas unidades de {menu[0][opcion - 1]} llevara: ")
+            if 1 <= opcion <= 5:
+                print(f"\nEl alimento que selecciono es: {menu[1][opcion - 1]}")
+                return opcion
+            
+            else:
+                    print(f"\nDato no Valido.")
+        else:
+                print(f"\nDato no Valido.")
 
-                        if unidad.isdigit():
-                            unidad = int(unidad)
+def cantidad_de_bebidas(): # Permite al usuario ingresas la cantidad de unidades de la bebida seleccionada.
+    while True:
+        unidad = input(f"\nCuantas unidades de {menu[0][opcion - 1]} llevara: ")
 
-                            if unidad >= 1:
-                                print(f"\nDecidio llevar {unidad} unidades de {menu[0][opcion - 1]}.")
-                                cliente.append(menu[0][opcion - 1])
-                                subtotal.append(unidad * precios[0][opcion - 1])
-                                unidades.append(unidad)
-                                precio_unitario.append(precios[0][opcion - 1])
-                                break
+        if unidad.isdigit():
+            unidad = int(unidad)
 
-                            else:
-                                print(f"Dato no valido.")
-    
-                        else:
-                            print("Dato no valido.")
-                    break
-
-                else:
-                    print(f"\nDato no valido, por favor ingresa el numero junto a la bebida o presiona ENTER para no seleccionar ninguna: ")
+            if unidad >= 1:
+                print(f"\nDecidio llevar {unidad} unidades de {menu[0][opcion - 1]}.")
+                cliente.append(menu[0][opcion - 1])
+                subtotal.append(unidad * precios[0][opcion - 1])
+                unidades.append(unidad)
+                precio_unitario.append(precios[0][opcion - 1])
+                return
 
             else:
-                print(f"\nDato no valido, por favor ingresa el numero junto a la bebida o presiona ENTER para no seleccionar ninguna: ")
+                print(f"Dato no valido.")
 
-        while True:          # Se le pregunta al usuario si desea agregar mas bebidas
-            decision = input(f"\nDeseas agregar otra bebida?\nEscribe 'si' o 'no' para continuar: ").strip().lower()
+        else:
+            print("Dato no valido.")
 
-            if decision == 'no':
-                print(f"\nDecidio no llevar mas bebidas.")
-                break
+def cantidad_de_alimentos(): # Permite al usuario ingresas la cantidad de unidades del alimento seleccionado.
+    while True:
+        unidad = input(f"\nCuantas unidades de {menu[1][opcion - 1]} llevara: ")
 
-            elif decision == 'si':
-                break
+        if unidad.isdigit():
+            unidad = int(unidad)
 
-            else:
-                print(f"\nDato no valido. ")
-
-    decision = 'si'   # Si decidio no llevar mas bebidas, se cambia decision = 'si' para que el while de menu de alimentos arranque.
-
-    while decision == 'si':
-        print(f"\n======= Menu de Alimntos =======")
-        for i in range (len(menu[1])):
-            print(f"{i+1}- {menu[1][i]:<24}$ {precios[1][i]:2.2f}")
-
-        while True:         # Validacion para evitar datos equivocados como ingresar letras o numeros que no estan en el menu.
-            opcion = input(f"\nSeleccione su Alimento escribiendo el numero junto a el o ENTER para no seleccionar ninguno: ")
-
-            if opcion == "":
-                print(f"\nDecidio no llevar Alimento.")
-                break
-
-            if opcion.isdigit():
-                opcion = int(opcion)
-
-                if 1 <= opcion <= 5:
-                    print(f"\nEl Alimento que selecciono es: {menu[1][opcion - 1]}")
-
-                    while True:            # Validacion para comprobar que las unidades requeridas por el cliente no sean cero o numero negativo.
-                        unidad = input(f"\nCuantas unidades de {menu[1][opcion - 1]} llevara: ")
-
-                        if unidad.isdigit():
-                            unidad = int(unidad)
-
-                            if unidad >= 1:
-                                print(f"\nDecidio llevar {unidad} unidades de {menu[1][opcion - 1]}.")
-                                cliente.append(menu[1][opcion - 1])
-                                subtotal.append(unidad * precios[1][opcion - 1])
-                                unidades.append(unidad)
-                                precio_unitario.append(precios[1][opcion - 1])
-                                break
-
-                            else:
-                                print(f"Dato no valido.")
-
-                        else:
-                            print("Dato no valido.")
-                    break
-
-                else:
-                    print(f"\nDato no valido, por favor ingresa el numero junto al alimento o presiona ENTER para no seleccionar ninguno: ")
+            if unidad >= 1:
+                print(f"\nDecidio llevar {unidad} unidades de {menu[1][opcion - 1]}.")
+                cliente.append(menu[1][opcion - 1])
+                subtotal.append(unidad * precios[1][opcion - 1])
+                unidades.append(unidad)
+                precio_unitario.append(precios[1][opcion - 1])
+                return
 
             else:
-                print(f"\nDato no valido, por favor ingresa el numero junto al alimento o presiona ENTER para no seleccionar ninguno: ")
+                print(f"Dato no valido.")
 
-        while True:     # Se le pregunta al usuario si desea agregar otro alimento.
-            decision = input(f"\nDeseas agregar otro alimento?\nEscribe 'si' o 'no' para continuar: ").strip().lower()
+        else:
+            print("Dato no valido.")
 
-            if decision == 'no':
-                print(f"\nDecidio no llevar mas alimentos.")
-                break
+def seguir_comprando(): # Validacion de si el usuario quiere otra bebida o alimento.
+     while True:
+        decision = input().strip().lower()
+
+        if decision == 'si' or decision == 'no':
+            return decision
         
-            elif decision == 'si':
-                    break
+        else:
+            print(f"\nDato no valido.\nDesea llevar otro Producto?\n(Si/No): ")
 
-            else:
-                    print(f"\nDato no valido. ")
+def nuevo_cliente(): # Validacion de si el usuario quiere registrar un nuevo pedido.
+    while True:
+        decision = input(f"\nDeseas registrar un nuevo pedido?\n(Si/No): ").strip().lower()
 
-    # Si decidio ya no llevar nada mas, se le pide su nombre para mostrarle el ticket detallado.
-    nombre = input(f"\nIngrese su nombre para generar el Ticket:\n")
+        if decision == 'no':
+            print(f"\nDecidio no registrar mas pedidos.\nSe mostrara el corte del punto de venta:\n")
+            return decision
+
+        elif decision == 'si':
+            print(f"\nRegistrando un nuevo pedido . . .\n\n\n")
+            return decision
+
+        else:
+            print(f"\nDato no valido.")
+
+def formato_ticket(sub_ticket=0): # Muestra el ticket del pedido del cliente actual.
     print(f"\n\n\n=================================== Su Ticket =========================================")
     print(f"Nombre: {nombre}\n=======================================================================================")
     print(f"Cantidad\tProducto\t\t\tPrecio Unitario\t\tImporte\n=======================================================================================")
@@ -154,43 +140,60 @@ while decision == 'si':                                # Mientras la decision se
     print(f"{"Subtotal:":>71} $ {sub_ticket:<2.2f}\n{"I.V.A.:":>71} $ {sub_ticket * .16:<2.2f}\n{"Total:":>71} $ {sub_ticket * 1.16:2.2f}")
     print(f"=======================================================================================")
 
-    # Se agrega toda la informacion del cliente actual a la matriz 'clientes' y se resetean todas las listas para poder ser usadas por el siguiente usuario.
-    clientes.append([nombre, unidades, cliente, precio_unitario, subtotal])
-    nombre, unidades, cliente, precio_unitario, subtotal, sub_ticket = "", [], [], [], [], 0
+def formato_ticket_final(): # Muestra el ticket final del dia con todos los clientes y sus pedidos.
+    print(f"\n=========================== Ventas del Dia - Cafe Andromeda ===========================\n\n\n")
+    print(f"Clientes de hoy: {len(clientes)}\n=======================================================================================")
+    total = 0
+    
+    for i in range(len(clientes)):
+        sub_ticket = 0
+        print(f"\n\n\nNombre: {clientes[i][0]}\n=======================================================================================")
+        print(f"{"Cantidad":<20} {"Producto":<21} {"Precio Unitario":<28} {"Importe":<23}\n=======================================================================================")
 
-    while True:   # El programa pregunta si un nuevo cliente hara uso de el, si no es asi, se pasa a mostrar el corte de venta de la cafeteria.
-        decision = input(f"\nDeseas registrar un nuevo pedido?\nEscribe 'si o 'no': ").strip().lower()
+        for j in range(len(clientes[i][2])):
+            sub_ticket += clientes[i][4][j]
+            print(f"    {clientes[i][1][j]:<16} {clientes[i][2][j]:<25} $ {clientes[i][3][j]:<22.2f} $ {clientes[i][4][j]:<20.2f}")
 
-        if decision == 'no':
-            print(f"\nSu decision fue no registrar mas pedidos.\nSe mostrara el corte del punto de venta:\n")
-            break
-
-        elif decision == 'si':
-            print(f"\nRegistrando un nuevo pedido . . .\n\n\n")
-            break
-
-        else:
-            print(f"\nDato no valido.")
-
-
-    # Este es el corte del dia, donde se muestra un resumen de los clientes y al final las ganancias totales del dia.
-print(f"\n=========================== Ventas del Dia - Cafe Andromeda ===========================\n\n\n")
-print(f"Clientes de hoy: {len(clientes)}\n=======================================================================================")
-
-for i in range(len(clientes)):
-    sub_ticket = 0
-    print(f"\n\n\nNombre: {clientes[i][0]}\n=======================================================================================")
-    print(f"{"Cantidad":<20} {"Producto":<21} {"Precio Unitario":<28} {"Importe":<23}\n=======================================================================================")
+        print(f"=======================================================================================")
+        print(f"{"Subtotal:":>71} $ {sub_ticket:<2.2f}\n{"I.V.A.:":>71} $ {sub_ticket * .16:<2.2f}\n{"Total:":>71} $ {sub_ticket * 1.16:2.2f}")
+        print(f"=======================================================================================")
+        total += sub_ticket * 1.16
+    return total
 
 
-    for j in range(len(clientes[i][2])):
-        sub_ticket += clientes[i][4][j]
-        print(f"    {clientes[i][1][j]:<16} {clientes[i][2][j]:<25} $ {clientes[i][3][j]:<22.2f} $ {clientes[i][4][j]:<20.2f}")
-    print(f"=======================================================================================")
-    print(f"{"Subtotal:":>71} $ {sub_ticket:<2.2f}\n{"I.V.A.:":>71} $ {sub_ticket * .16:<2.2f}\n{"Total:":>71} $ {sub_ticket * 1.16:2.2f}")
-    print(f"=======================================================================================")
-    total += sub_ticket * 1.16
+### Inicio del Programa
 
-print(f"\nGanancias totales del dia de hoy:  $ {total:2.2f}\n\n")
+while decision == 'si': # decision = "si" para iniciar el programa y permitir al usuario registrar un pedido.
+    print(f"\n==== Bienvenido a Cafe Andromeda ====")
 
-### Fin del Programa 
+    while decision == 'si':
+        menu_de_bebidas(menu, precios)  # Muestra el menu de bebidas y sus precios.
+        opcion = eleccion_de_bebida()
+        if opcion is not None:  # Si el usuario dio ENTER para no seleccionar ninguna bebida, no se le pedira la cantidad de unidades.
+            cantidad_de_bebidas()
+        print(f"\nDesea llevar otra Bebida?\n(Si/No): ")
+        decision = seguir_comprando()   # Si el usuario eligio 'si' se reinicia el ciclo para permitirle agregar otra bebida.
+
+    decision = 'si'
+
+    while decision == 'si':
+        menu_de_alimentos(menu, precios) # Muestra el menu de alimentos y sus precios.
+        opcion = eleccion_de_alimento()
+        if opcion is not None:  # Si el usuario dio ENTER para no seleccionar ningun alimento, no se le pedira la cantidad de unidades.
+            cantidad_de_alimentos()
+        print(f"\nDesea llevar otro Alimento?\n(Si/No): ")
+        decision = seguir_comprando()   # Si el usuario eligio 'si' se reinicia el ciclo para permitirle agregar otro alimento.
+
+    nombre = input(f"\nIngrese su nombre para generar el ticket:\n")
+
+    formato_ticket(sub_ticket)  # Muestra el ticket del pedido del cliente actual.
+
+    clientes.append([nombre, unidades, cliente, precio_unitario, subtotal])     # Agrega la informacion del cliente actual a la lista de clientes para poder mostrarla en el ticket final.
+    nombre, unidades, cliente, precio_unitario, subtotal, sub_ticket = "", [], [], [], [], 0 # Resetea las listas para el proximo cliente.
+
+    decision = nuevo_cliente() # Pregunta al usuario si desea registrar un nuevo pedido, si elige 'si' se reinicia el ciclo para permitirle registrar otro pedido.
+
+total = formato_ticket_final() # Muestra el ticket final del dia con todos los clientes y sus pedidos, tambien asignando el total de ganancias del dia a la variable total.
+print(f"\n\n- Ganancias totales del dia de hoy:  $ {total:2.2f}\n\n") # Muestra el total de ganancias del dia.
+
+### Fin del Programa
